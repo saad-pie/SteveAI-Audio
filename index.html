@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🔊 AI Audio Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+    textarea {
+      width: 90%;
+      height: 100px;
+      margin-bottom: 1rem;
+      font-size: 16px;
+    }
+    select, button {
+      padding: 0.7rem 1.5rem;
+      margin: 0.5rem;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+    }
+    button {
+      background: #00d18a;
+      color: black;
+      cursor: pointer;
+    }
+    audio {
+      margin-top: 1rem;
+      width: 90%;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎙️ AI Audio Generator</h1>
+  <textarea id="textInput" placeholder="Enter your text here..."></textarea><br>
+  <select id="voice">
+    <option value="en">English - Female</option>
+    <option value="en_m">English - Male</option>
+    <option value="ur">Urdu - Female</option>
+    <option value="ur_m">Urdu - Male</option>
+  </select><br>
+  <button onclick="generateAudio()">Generate Audio</button>
+  <audio id="audioPlayer" controls></audio>
+
+  <script>
+    async function generateAudio() {
+      const text = document.getElementById("textInput").value;
+      const voice = document.getElementById("voice").value;
+
+      const res = await fetch("https://your-api-url.com/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, voice })
+      });
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+
+      const player = document.getElementById("audioPlayer");
+      player.src = url;
+
+      // Auto-download
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "audio.mp3";
+      a.click();
+    }
+  </script>
+</body>
+</html>
